@@ -1,4 +1,4 @@
-# M_A_R_K
+# M-A-R-K
 Final year computer science RHUL project.
 
 The YouTube video linked below shows how to run the proof-of-concept demonstration:
