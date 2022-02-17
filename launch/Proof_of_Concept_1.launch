@@ -1,3 +1,0 @@
-<launch>
-<node name= "proof_of_concept_starter_node" pkg="M-A-R-K" type="proof_of_concept_demo.py" output="screen"/>
-</launch>
