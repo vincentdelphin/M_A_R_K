@@ -10,3 +10,5 @@ https://youtu.be/XlDsG0nDP6I
 
 The link to the Rosject containing the proof of concept is given below: 
 https://app.theconstructsim.com/#/Rosject/491785
+
+The reinforcement learning part of this project depends on the hector_gazebo and hector_quadrotor for server messages used by the Sjtu drone.
