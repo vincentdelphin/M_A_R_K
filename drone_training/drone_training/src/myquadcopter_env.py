@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
+'''
+Created on Mar 20, 2022
+@author Vincent
+Training code made by Ricardo Tellez <rtellez@theconstructsim.com>
+Based on many other examples around Internet.
 
+This file is Updated version of the quadcopter environment used in https://bitbucket.org/theconstructcore/drone_training.git by Ricardo Tellez.
+Updated interpreter path for Python 3 and added pydoc.
+'''
 import gym
 import rospy
 import time
