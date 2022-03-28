@@ -11,9 +11,10 @@ import rospy
 from std_srvs.srv import Empty
 
 class GazeboConnection():
-'''
-Gazebo connection class requires connections to the gazebo servers to unpause, pause and reset the gazebo simulation after each episdode.
-'''
+    
+    '''
+    Gazebo connection class requires connections to the gazebo servers to unpause, pause and reset the gazebo simulation after each episdode.
+    '''
     def __init__(self):
         self.unpause = rospy.ServiceProxy('/gazebo/unpause_physics', Empty)
         self.pause = rospy.ServiceProxy('/gazebo/pause_physics', Empty)
