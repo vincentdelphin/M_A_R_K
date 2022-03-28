@@ -3,10 +3,10 @@
 Created on Mar 20, 2022
 @author Vincent
 Training code made by Ricardo Tellez <rtellez@theconstructsim.com>
-Based on many other examples around Internet.
+Based on many other examples around Internet
 
-This file is Updated version of the quadcopter environment used in https://bitbucket.org/theconstructcore/drone_training.git by Ricardo Tellez.
-Updated interpreter path for Python 3 and added pydoc.
+This file is Updated version of the quadcopter environment used in https://bitbucket.org/theconstructcore/drone_training.git by Ricardo Tellez
+Updated interpreter path for Python 3 and added pydoc
 '''
 import gym
 import rospy
@@ -32,7 +32,10 @@ reg = register(
 
 
 class QuadCopterEnv(gym.Env):
-
+    '''
+    Intialisation of environment including required topics to publish actions to such as /cmd_vel, /drone/takeoff etc
+    Param server provides desired pose in the (x,y,z) coordinate axis
+    '''
     def __init__(self):
         
         # We assume that a ROS node has already been created
@@ -58,12 +61,18 @@ class QuadCopterEnv(gym.Env):
         self.reward_range = (-np.inf, np.inf)
 
         self._seed()
-
+    '''
+    Used to generate random number generator using numpy
+    :returns: Random number for seeding simulation
+    '''
     # A function to initialize the random generator
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
-        
+    '''
+    Reset gazebo environment including drone's starting position and desired pose in the (x,y,z) coordinate axis
+    :returns: observation of environment in the x axis
+    '''    
     # Resets the state of the environment and returns an initial observation.
     def reset(self):
         
@@ -86,7 +95,11 @@ class QuadCopterEnv(gym.Env):
         self.gazebo.pauseSim()
 
         return observation
-
+    '''
+    Executes action in simulation
+    :param action: action decided by chosen algorithm in training script
+    :return: state of agent in environment after performing action along with reward
+    '''
     def step(self, action):
 
         # Given the action selected by the learning algorithm,
@@ -134,7 +147,10 @@ class QuadCopterEnv(gym.Env):
         state = [data_pose.position.x]
         return state, reward, done, {}
 
-
+    '''
+    Provides drone observation from the drone's IMU (Inertial Measurement Unit) and drone/gt_pose topic.
+    :return: current location of drone from both gt_pose topic and imu topic.
+    '''
     def take_observation (self):
         data_pose = None
         while data_pose is None:
@@ -151,7 +167,12 @@ class QuadCopterEnv(gym.Env):
                 rospy.loginfo("Current drone imu not ready yet, retrying for getting robot imu")
         
         return data_pose, data_imu
-
+    '''
+    Calculates distance between two points in 3 dimensions. Used in generating distance from final position and desired position
+    :param p_init: initial distance
+    :param p_end: end distance
+    :return: distance between two points
+    '''
     def calculate_dist_between_two_Points(self,p_init,p_end):
         a = np.array((p_init.x ,p_init.y, p_init.z))
         b = np.array((p_end.x ,p_end.y, p_end.z))
@@ -160,14 +181,18 @@ class QuadCopterEnv(gym.Env):
         
         return dist
 
-
+    '''
+    Saves best distance travelled between initial point and desired destination
+    '''
     def init_desired_pose(self):
         
         current_init_pose, imu = self.take_observation()
         
         self.best_dist = self.calculate_dist_between_two_Points(current_init_pose.position, self.desired_pose.position)
     
-
+    '''
+    Checks at a rate of 10 cycles per second if the connections between the takeoff and cmd_vel topics are connected.
+    '''
     def check_topic_publishers_connection(self):
         me = self.takeoff_pub.get_num_connections()
         print(me)
@@ -182,7 +207,10 @@ class QuadCopterEnv(gym.Env):
             rate.sleep();
         rospy.loginfo("Cmd_vel Publisher Connected")
         
-
+    '''
+    Sends a Twist message type with 0 linear and angular velocities in the Z directions
+    Essentially, recalibrates the cmd_vel topic
+    '''
     def reset_cmd_vel_commands(self):
         # We send an empty null Twist
         vel_cmd = Twist()
@@ -190,7 +218,10 @@ class QuadCopterEnv(gym.Env):
         vel_cmd.angular.z = 0.0
         self.vel_pub.publish(vel_cmd)
 
-
+    '''
+    Sends empty message to /drone/take_off topic for drone to leave the ground before performing actions to reach desired pose
+    :param seconds_taking_off: duration of taking off in the z axis
+    '''
     def takeoff_sequence(self, seconds_taking_off=1):
         # Before taking off be sure that cmd_vel value there is is null to avoid drifts
         self.reset_cmd_vel_commands()
@@ -201,7 +232,11 @@ class QuadCopterEnv(gym.Env):
         time.sleep(seconds_taking_off)
         rospy.loginfo( "Taking-Off sequence completed")
         
-
+    '''
+    Calculates reward dependent on if the distance travelled in the episode is less/more than the best distance to the desired pose achieved in a previous episode.
+    :param current_pose: present position in time
+    :return: reward
+    '''
     def improved_distance_reward(self, current_pose):
         current_dist = self.calculate_dist_between_two_Points(current_pose.position, self.desired_pose.position)
         #rospy.loginfo("Calculated Distance = "+str(current_dist))
@@ -216,7 +251,13 @@ class QuadCopterEnv(gym.Env):
             #print "Made Distance bigger= "+str(self.best_dist)
         
         return reward
-        
+    '''
+    Considers if the altitude and orbital inclination reached by the drone breach the specified range
+    If drone exceeds the ranges, then the episode is finished and negative reward is given
+    :param data_position: present position in time used to find altitude
+    :param data_imu: present position in time used to find orientation
+    :return: reward
+    '''    
     def process_data(self, data_position, data_imu):
 
         done = False
