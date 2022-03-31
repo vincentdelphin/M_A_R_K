@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 '''
 Created on Mar 20, 2022
-@author Vincent
+@author Ricardo Tellez and Vincent Delphin
 
 Establishes connection to necessary gazebo servers. 
 This file is Updated version of the GazeboConnection used in https://bitbucket.org/theconstructcore/drone_training.git by Ricardo Tellez.
