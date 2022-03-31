@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 '''
 Created on Mar 20, 2022
-@author Vincent
+@author Ricardo Tellez and Vincent Delphin
+
 Training code made by Ricardo Tellez <rtellez@theconstructsim.com>
 Based on many other examples around Internet
 
