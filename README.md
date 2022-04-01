@@ -16,6 +16,8 @@ The stju-drone of this project depends on the hector_gazebo and hector_quadrotor
 The stju-drone repository is developed by Georg No, the repository is provided below:
 https://github.com/NovoG93/sjtu-drone
 
+The sjtu-drone exists in this repository due to the additional custom gazebo worlds that were added to the worlds directory.
+
 The OpenAI drone_training package written by Ricardo Tellez is used as the basis for the reinforcement development of the project.
 Licensed under the LGPLV3 (GNU Lesser General Public License)
 
