@@ -11,7 +11,8 @@ https://youtu.be/XlDsG0nDP6I
 The link to the Rosject containing the proof of concept is given below: 
 https://app.theconstructsim.com/#/Rosject/491785
 
-The stju-drone of this project depends on the hector_gazebo and hector_quadrotor packages for server messages used by the Sjtu drone. The stju-drone provides the simulated model for gazebo to emulate the M-A-R-K drone. Licensed under the GNU (General Public License V3.0)
+The stju-drone of this project depends on the hector_gazebo and hector_quadrotor packages for server messages used by the Sjtu drone. The stju-drone provides the simulated model for gazebo to emulate the M-A-R-K drone. Additionally, the simulation depends on the spawn_robot_tools package designed by TheConstructCore: https://bitbucket.org/theconstructcore/spawn_robot_tools/src/master/spawn_robot_tools_pkg/
+Licensed under the GNU (General Public License V3.0)
 
 The stju-drone repository is developed by Georg No, the repository is provided below:
 https://github.com/NovoG93/sjtu-drone
